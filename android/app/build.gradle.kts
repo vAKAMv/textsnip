@@ -57,14 +57,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            // Deliberately no fallback to the debug key: a debug-signed APK
-            // that slipped out as a release could never be updated in place.
-            // Debug builds (`flutter run`) are unaffected.
+            // Personal fork: fall back to the debug key when no release key is configured,
+            // so the APK can be built for my own phone.
             signingConfig = signingConfigs.findByName("release")
-                ?: throw GradleException(
-                    "Release signing is not configured: create android/key.properties " +
-                    "from android/key.properties.example (and the keystore it points to)."
-                )
+                ?: signingConfigs.getByName("debug")
         }
     }
 
